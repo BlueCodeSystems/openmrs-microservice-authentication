@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openmrs-microservice-authentication
+  labels:
+    app: openmrs-microservice-authentication
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: openmrs-microservice-authentication
+  template:
+    metadata:
+      labels:
+        app: openmrs-microservice-authentication
+    spec:
+      containers:
+        - name: openmrs-authentication
+          image: bluecodesystemsltd/openmrs-microservice-authentication:latest
+          ports:
+            - containerPort: 8087
+          env:
+            - name: MYSQL_HOST
+              value: ""
+            - name: MYSQL_USERNAME
+              value: ""
+            - name: MYSQL_USER_PASSWORD
+              value: ""
+            - name: OPENMRS_MYSQL_DATABASE
+              value: ""
+            - name: OPENMRS_SITE
+              value: ""
+            - name: SECRET_KEY
+              value: ""
+            - name: SESSION_EXPIRATION
+              value: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openmrs-microservice-authentication-service
+spec:
+  selector:
+    app: openmrs-microservice-authentication
+  ports:
+  - protocol: TCP
+    port: 8087
+    targetPort: 8087
